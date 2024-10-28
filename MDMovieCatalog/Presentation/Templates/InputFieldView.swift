@@ -24,15 +24,18 @@ class InputFieldView: UIView {
     }
     
     private var inputType: InputType
+    private var showsIconButton: Bool
     
-    init(placeholder: String, type: InputType) {
+    init(placeholder: String, type: InputType, showsIconButton: Bool = true) {
         self.inputType = type
+        self.showsIconButton = showsIconButton
         super.init(frame: .zero)
         setupView(placeholder: placeholder)
     }
     
     required init?(coder: NSCoder) {
         self.inputType = .text
+        self.showsIconButton = true
         super.init(coder: coder)
         setupView(placeholder: "")
     }
@@ -56,11 +59,15 @@ class InputFieldView: UIView {
         textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: placeholderAttributes)
         
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-
+        
         setupIconButton()
         
         self.addSubview(textField)
         self.addSubview(iconButton)
+        if !showsIconButton {
+            iconButton.isHidden = false
+            textField.isEnabled = false
+        }
         
         NSLayoutConstraint.activate([
             textField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: padding.left),
@@ -112,6 +119,11 @@ class InputFieldView: UIView {
     }
     
     private func updateIconButtonVisibility() {
+        guard showsIconButton else {
+            iconButton.isHidden = true
+            return
+        }
+        
         let isTextEmpty = textField.text?.isEmpty ?? true
         
         switch inputType {
@@ -159,27 +171,28 @@ class InputFieldView: UIView {
     private func createToolBar() -> UIToolbar {
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
-           
+        
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(donePressed))
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelPressed))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-           
+        
         toolbar.items = [cancelButton, flexibleSpace, doneButton]
-           
+        
         return toolbar
     }
-       
+    
     @objc private func donePressed() {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ru_RU")
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
+        dateFormatter.dateFormat = "dd MMMM yyyy"
         
         textField.text = dateFormatter.string(from: datePicker.date)
         textField.resignFirstResponder()
         updateIconButtonVisibility()
     }
-       
+    
     @objc private func cancelPressed() {
         textField.resignFirstResponder()
     }

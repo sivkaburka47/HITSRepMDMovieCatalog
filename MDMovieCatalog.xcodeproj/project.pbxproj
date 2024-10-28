@@ -53,6 +53,9 @@
 		E694138A2CCA32E500C19F17 /* MovieAPIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69413892CCA32DC00C19F17 /* MovieAPIEndpoint.swift */; };
 		E694138C2CCA333900C19F17 /* MovieRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E694138B2CCA332E00C19F17 /* MovieRepositoryImpl.swift */; };
 		E694138E2CCAC76F00C19F17 /* GradientOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E694138D2CCAC76400C19F17 /* GradientOverlayView.swift */; };
+		E6FB14242CCD835A00E79D62 /* SignOutButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14232CCD835100E79D62 /* SignOutButtonView.swift */; };
+		E6FB14262CCE3F3C00E79D62 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14252CCE3F3300E79D62 /* ProfileModel.swift */; };
+		E6FB14282CCE432400E79D62 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14272CCE431E00E79D62 /* ProfileViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -105,6 +108,9 @@
 		E69413892CCA32DC00C19F17 /* MovieAPIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAPIEndpoint.swift; sourceTree = "<group>"; };
 		E694138B2CCA332E00C19F17 /* MovieRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRepositoryImpl.swift; sourceTree = "<group>"; };
 		E694138D2CCAC76400C19F17 /* GradientOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientOverlayView.swift; sourceTree = "<group>"; };
+		E6FB14232CCD835100E79D62 /* SignOutButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignOutButtonView.swift; sourceTree = "<group>"; };
+		E6FB14252CCE3F3300E79D62 /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
+		E6FB14272CCE431E00E79D62 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		F8A5A6D7FFDD57B2C71C63F5 /* Pods-MDMovieCatalog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MDMovieCatalog.debug.xcconfig"; path = "Target Support Files/Pods-MDMovieCatalog/Pods-MDMovieCatalog.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -210,6 +216,7 @@
 		E643266F2CC9812E007F6D47 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				E6FB14252CCE3F3300E79D62 /* ProfileModel.swift */,
 				E69413812CCA320F00C19F17 /* Movie.swift */,
 				E643266D2CC9812E007F6D47 /* LoginCredentials.swift */,
 				E643266E2CC9812E007F6D47 /* RegistrationCredentials.swift */,
@@ -258,12 +265,12 @@
 		E643267E2CC9812E007F6D47 /* Templates */ = {
 			isa = PBXGroup;
 			children = (
+				E6FB14232CCD835100E79D62 /* SignOutButtonView.swift */,
 				E694138D2CCAC76400C19F17 /* GradientOverlayView.swift */,
 				E64326792CC9812E007F6D47 /* BackButtonView.swift */,
 				E643267A2CC9812E007F6D47 /* ButtonView.swift */,
 				E643267B2CC9812E007F6D47 /* GenderSwitchView.swift */,
 				E643267C2CC9812E007F6D47 /* InputFieldView.swift */,
-				E643267D2CC9812E007F6D47 /* TabBarCustomView.swift */,
 			);
 			path = Templates;
 			sourceTree = "<group>";
@@ -323,6 +330,7 @@
 		E643268E2CC9812E007F6D47 /* ProfileScreen */ = {
 			isa = PBXGroup;
 			children = (
+				E6FB14272CCE431E00E79D62 /* ProfileViewModel.swift */,
 				E643268D2CC9812E007F6D47 /* ProfileViewController.swift */,
 			);
 			path = ProfileScreen;
@@ -335,6 +343,7 @@
 				E643268A2CC9812E007F6D47 /* FeedScreen */,
 				E643268C2CC9812E007F6D47 /* MoviesScreen */,
 				E643268E2CC9812E007F6D47 /* ProfileScreen */,
+				E643267D2CC9812E007F6D47 /* TabBarCustomView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -562,6 +571,7 @@
 				E64326AC2CC9812E007F6D47 /* LoginCredentials.swift in Sources */,
 				E69413842CCA322700C19F17 /* MovieRepository.swift in Sources */,
 				E64326AD2CC9812E007F6D47 /* RegistrationCredentials.swift in Sources */,
+				E6FB14242CCD835A00E79D62 /* SignOutButtonView.swift in Sources */,
 				E694138C2CCA333900C19F17 /* MovieRepositoryImpl.swift in Sources */,
 				E64326AE2CC9812E007F6D47 /* SignInRepository.swift in Sources */,
 				E64326AF2CC9812E007F6D47 /* SignUpRepository.swift in Sources */,
@@ -570,6 +580,7 @@
 				E64326B22CC9812E007F6D47 /* AppRouter.swift in Sources */,
 				E64326B32CC9812E007F6D47 /* BackButtonView.swift in Sources */,
 				E69413822CCA321300C19F17 /* Movie.swift in Sources */,
+				E6FB14262CCE3F3C00E79D62 /* ProfileModel.swift in Sources */,
 				E64326B42CC9812E007F6D47 /* ButtonView.swift in Sources */,
 				E64326B52CC9812E007F6D47 /* GenderSwitchView.swift in Sources */,
 				E64326B62CC9812E007F6D47 /* InputFieldView.swift in Sources */,
@@ -584,6 +595,7 @@
 				E64326BC2CC9812E007F6D47 /* FavouritesViewController.swift in Sources */,
 				E64326BD2CC9812E007F6D47 /* FeedScreenViewModel.swift in Sources */,
 				E64326BE2CC9812E007F6D47 /* FeedViewController.swift in Sources */,
+				E6FB14282CCE432400E79D62 /* ProfileViewModel.swift in Sources */,
 				E64326BF2CC9812E007F6D47 /* MoviesViewController.swift in Sources */,
 				E69413862CCA324000C19F17 /* FetchMoviesUseCase.swift in Sources */,
 				E64326C02CC9812E007F6D47 /* ProfileViewController.swift in Sources */,

@@ -12,8 +12,18 @@ class TabBarCustomViewController: UIViewController {
     private var tabBarBackgroundView: UIView?
     private var stackView: UIStackView?
     private var currentViewController: UIViewController?
+    private var appRouter: AppRouter
     
     private var tabBarItems: [UIView] = []
+    
+    init(appRouter: AppRouter) {
+        self.appRouter = appRouter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -158,7 +168,7 @@ class TabBarCustomViewController: UIViewController {
     }
     
     @objc private func showProfile() {
-        let profileViewController = ProfileViewController()
+        let profileViewController = ProfileViewController(appRouter: appRouter)
         displayContentController(profileViewController)
         updateTabBarSelection(selectedIndex: 3)
     }

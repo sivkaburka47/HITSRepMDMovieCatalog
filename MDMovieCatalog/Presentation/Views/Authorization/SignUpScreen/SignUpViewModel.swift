@@ -95,7 +95,7 @@ class SignUpViewModel {
     
     private func formatDateToISO8601(_ dateString: String) -> String? {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMM yyyy г."
+        dateFormatter.dateFormat = "dd MMMM yyyy"
         dateFormatter.locale = Locale(identifier: "ru_RU")
         
         guard let date = dateFormatter.date(from: dateString) else {

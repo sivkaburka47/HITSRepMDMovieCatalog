@@ -37,7 +37,8 @@ class AppRouter {
     }
     
     func navigateToMain() {
-        let tabBarController = TabBarCustomViewController()
+        let tabBarController = TabBarCustomViewController(appRouter: self)
         self.navigationController?.pushViewController(tabBarController, animated: true)
     }
+    
 }

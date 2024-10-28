@@ -9,8 +9,8 @@ import UIKit
 
 class GenderSwitchView: UIView {
     
-    private let maleButton = UIButton(type: .system)
-    private let femaleButton = UIButton(type: .system)
+    public let maleButton = UIButton(type: .system)
+    public let femaleButton = UIButton(type: .system)
     private var selectedButton: UIButton?
     
     var selectedGender: Int? {
@@ -115,11 +115,11 @@ class GenderSwitchView: UIView {
         button.layer.insertSublayer(gradientLayer, at: 0)
     }
     
-    @objc private func maleButtonTapped() {
+    @objc public func maleButtonTapped() {
         selectButton(maleButton)
     }
     
-    @objc private func femaleButtonTapped() {
+    @objc public func femaleButtonTapped() {
         selectButton(femaleButton)
     }
     
