@@ -6,15 +6,390 @@
 //
 
 import UIKit
+import SDWebImage
 
 class MoviesViewController: UIViewController {
-
+    
+    private var viewModel: MoviesViewModel!
+    
+    private var labelsStackViewTop: UIStackView!
+    private var labelsStackViewBottom: UIStackView!
+    private var movieNameLabel: UILabel!
+    private var carouselStackView: UIStackView!
+    private var carouselContainer: UIImageView!
+    private var containerView: UIView!
+    private var progressViews: [UIView] = []
+    private var progressFillViews: [UIView] = []
+    private var progressFillWidthConstraints: [NSLayoutConstraint] = []
+    private var currentStep = 0
+    private var timer: Timer?
+    private let totalSteps = 5
+    private var currentProgress = 0.0
+    private var activityIndicator: UIActivityIndicatorView!
+    
+    private var fadeOutTop: UIView!
+    private var fadeOutBottom: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
-//        title = "Movies"
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        viewModel = MoviesViewModel()
+        view.backgroundColor = UIColor.dark
+        configureContainer()
+        configureCarousel()
+
+        configureActivityIndicator()
+        activityIndicator.startAnimating()
+        viewModel.fetchMoviesForCarousel { [weak self] in
+            DispatchQueue.main.async {
+                self?.startProgressTimer()
+                self?.activityIndicator.stopAnimating()
+            }
+        }
         
+
+    }
+
+    @objc private func handleCarouselTap(_ gesture: UITapGestureRecognizer) {
+        let tapLocation = gesture.location(in: carouselContainer)
+        let containerWidth = carouselContainer.bounds.width
+        
+        if tapLocation.x < containerWidth / 2 {
+            if currentStep == 0 {
+                currentStep = totalSteps - 1
+            } else {
+                currentStep -= 1
+            }
+        } else {
+            currentStep = (currentStep + 1) % totalSteps
+        }
+        
+        currentProgress = 0.0
+        updateCarouselMovie()
+        updateProgress(to: currentStep)
+    }
+
+    private func configureActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.color = .white
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        carouselContainer.addSubview(activityIndicator)
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: carouselContainer.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: carouselContainer.centerYAnchor)
+        ])
+    }
+
+    private func configureContainer() {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.backgroundColor = .clear
+        scrollView.contentInsetAdjustmentBehavior = .never
+        view.addSubview(scrollView)
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -88),
+        ])
+
+        containerView = UIView()
+        containerView.backgroundColor = .clear
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            containerView.heightAnchor.constraint(equalToConstant: 1627)
+        ])
     }
     
+    private func configureCarousel() {
+        carouselContainer = UIImageView()
+        carouselContainer.clipsToBounds = true
+        carouselContainer.layer.cornerRadius = 24
+        carouselContainer.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        carouselContainer.translatesAutoresizingMaskIntoConstraints = false
+        carouselContainer.contentMode = .scaleAspectFill
+        
+        containerView.addSubview(carouselContainer)
+        NSLayoutConstraint.activate([
+            carouselContainer.topAnchor.constraint(equalTo: containerView.topAnchor),
+            carouselContainer.heightAnchor.constraint(equalToConstant: 464),
+            carouselContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            carouselContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        ])
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleCarouselTap(_:)))
+        carouselContainer.isUserInteractionEnabled = true
+        carouselContainer.addGestureRecognizer(tapGesture)
+        configureFadeOutOverlays()
+        
+        carouselStackView = UIStackView()
+        carouselStackView.backgroundColor = .clear
+        carouselStackView.axis = .horizontal
+        carouselStackView.spacing = 4
+        carouselStackView.distribution = .fillEqually
+        carouselStackView.translatesAutoresizingMaskIntoConstraints = false
+        carouselContainer.addSubview(carouselStackView)
+        NSLayoutConstraint.activate([
+            carouselStackView.topAnchor.constraint(equalTo: carouselContainer.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 4),
+            carouselStackView.trailingAnchor.constraint(equalTo: carouselContainer.trailingAnchor, constant: -24),
+            carouselStackView.leadingAnchor.constraint(equalTo: carouselContainer.leadingAnchor, constant: 24),
+            carouselStackView.heightAnchor.constraint(equalToConstant: 4)
+        ])
+        
+        for _ in 0..<totalSteps {
+            let lineView = UIView()
+            lineView.backgroundColor = .grayCustom
+            lineView.layer.cornerRadius = 4
+            lineView.translatesAutoresizingMaskIntoConstraints = false
+            carouselStackView.addArrangedSubview(lineView)
+            NSLayoutConstraint.activate([
+                lineView.heightAnchor.constraint(equalTo: carouselStackView.heightAnchor)
+            ])
+            progressViews.append(lineView)
+            
+            let fillView = UIView()
+            fillView.layer.cornerRadius = 4
+            fillView.clipsToBounds = true
+            fillView.translatesAutoresizingMaskIntoConstraints = false
+            lineView.addSubview(fillView)
+            NSLayoutConstraint.activate([
+                fillView.leadingAnchor.constraint(equalTo: lineView.leadingAnchor),
+                fillView.topAnchor.constraint(equalTo: lineView.topAnchor),
+                fillView.bottomAnchor.constraint(equalTo: lineView.bottomAnchor),
+            ])
+            let widthConstraint = fillView.widthAnchor.constraint(equalToConstant: 0)
+            widthConstraint.isActive = true
+            progressFillViews.append(fillView)
+            progressFillWidthConstraints.append(widthConstraint)
+
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.colors = [UIColor(red: 223/255, green: 40/255, blue: 0/255, alpha: 1).cgColor,
+                                    UIColor(red: 255/255, green: 102/255, blue: 51/255, alpha: 1).cgColor]
+            gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
+            gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
+            gradientLayer.frame = fillView.bounds
+            fillView.layer.addSublayer(gradientLayer)
+        }
+        
+        let infoBlock = UIView()
+        infoBlock.backgroundColor = .clear
+        infoBlock.translatesAutoresizingMaskIntoConstraints = false
+        carouselContainer.addSubview(infoBlock)
+        NSLayoutConstraint.activate([
+            infoBlock.leadingAnchor.constraint(equalTo: carouselContainer.leadingAnchor, constant: 24),
+            infoBlock.trailingAnchor.constraint(equalTo: carouselContainer.trailingAnchor, constant: -24),
+            infoBlock.bottomAnchor.constraint(equalTo: carouselContainer.bottomAnchor, constant: -24),
+            infoBlock.heightAnchor.constraint(equalToConstant: 118)
+        ])
+        
+        movieNameLabel = UILabel()
+        movieNameLabel.font = UIFont(name: "Manrope-Bold", size: 36)
+        movieNameLabel.textColor = .white
+        movieNameLabel.lineBreakMode = .byTruncatingTail
+        movieNameLabel.numberOfLines = 1
+        movieNameLabel.textAlignment = .left
+        movieNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        infoBlock.addSubview(movieNameLabel)
+        NSLayoutConstraint.activate([
+            movieNameLabel.leadingAnchor.constraint(equalTo: infoBlock.leadingAnchor),
+            movieNameLabel.trailingAnchor.constraint(equalTo: infoBlock.trailingAnchor),
+            movieNameLabel.topAnchor.constraint(equalTo: infoBlock.topAnchor),
+            movieNameLabel.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
+        labelsStackViewBottom = UIStackView()
+        labelsStackViewBottom.axis = .horizontal
+        labelsStackViewBottom.alignment = .leading
+        labelsStackViewBottom.distribution = .fillProportionally
+        labelsStackViewBottom.spacing = 4
+        labelsStackViewBottom.translatesAutoresizingMaskIntoConstraints = false
+        infoBlock.addSubview(labelsStackViewBottom)
+        
+        NSLayoutConstraint.activate([
+            labelsStackViewBottom.leadingAnchor.constraint(equalTo: infoBlock.leadingAnchor),
+            labelsStackViewBottom.bottomAnchor.constraint(equalTo: infoBlock.bottomAnchor),
+            labelsStackViewBottom.heightAnchor.constraint(equalToConstant: 28),
+        ])
+        
+        labelsStackViewTop = UIStackView()
+        labelsStackViewTop.axis = .horizontal
+        labelsStackViewTop.alignment = .leading
+        labelsStackViewTop.distribution = .fillProportionally
+        labelsStackViewTop.spacing = 4
+        labelsStackViewTop.translatesAutoresizingMaskIntoConstraints = false
+        infoBlock.addSubview(labelsStackViewTop)
+        
+        NSLayoutConstraint.activate([
+            labelsStackViewTop.leadingAnchor.constraint(equalTo: infoBlock.leadingAnchor),
+            labelsStackViewTop.bottomAnchor.constraint(equalTo: labelsStackViewBottom.topAnchor, constant: -4),
+            labelsStackViewTop.heightAnchor.constraint(equalToConstant: 28),
+        ])
+        
+        let lookButton = ButtonView(title: "Смотреть", color: .orange)
+        lookButton.translatesAutoresizingMaskIntoConstraints = false
+        infoBlock.addSubview(lookButton)
+        NSLayoutConstraint.activate([
+            lookButton.heightAnchor.constraint(equalToConstant: 48),
+            lookButton.widthAnchor.constraint(equalToConstant: 118),
+            lookButton.trailingAnchor.constraint(equalTo: infoBlock.trailingAnchor),
+            lookButton.bottomAnchor.constraint(equalTo: infoBlock.bottomAnchor),
+        ])
+        
+        updateProgress(to: currentStep)
+    }
     
+    private func startProgressTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            if floor(self.currentProgress) == self.currentProgress {
+                self.updateCarouselMovie()
+            }
+            self.currentProgress += 0.1 / 5.0
+            if self.currentProgress >= 1.0 {
+                self.currentProgress = 0.0
+                self.currentStep += 1
+                
+                if self.currentStep >= self.totalSteps {
+                    self.currentStep = 0
+                }
+            }
+            self.updateProgress(to: self.currentStep)
+        }
+    }
+    
+    private func updateProgress(to step: Int) {
+        for (index, view) in progressViews.enumerated() {
+            if let fillView = progressFillViews[safe: index], let widthConstraint = progressFillWidthConstraints[safe: index] {
+                if index < step {
+                    widthConstraint.constant = view.frame.width
+                } else if index == step {
+                    let newWidth = view.frame.width * CGFloat(currentProgress)
+                    UIView.animate(withDuration: 0.1) {
+                        widthConstraint.constant = newWidth
+                        fillView.layoutIfNeeded()
+                    }
+                } else {
+                    widthConstraint.constant = 0
+                }
+                
+                if let gradientLayer = fillView.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
+                    gradientLayer.frame = fillView.bounds
+                }
+            }
+        }
+    }
+    
+    deinit {
+        timer?.invalidate()
+    }
+    
+    private func updateCarouselMovie() {
+        guard let movie = viewModel.getCurrentMovieForCarousel(index: currentStep) else { return }
+        carouselContainer.sd_setImage(with: movie.coverImageURL, completed: nil)
+        movieNameLabel.text = movie.title
+        updateGenres(movie.genres)
+    }
+    
+    private func configureFadeOutOverlays() {
+        fadeOutTop = UIView()
+        fadeOutTop.backgroundColor = .clear
+        fadeOutTop.translatesAutoresizingMaskIntoConstraints = false
+
+        let topGradientLayer = CAGradientLayer()
+        topGradientLayer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 80)
+        topGradientLayer.colors = [UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1).cgColor,
+                                   UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 0).cgColor]
+        topGradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        topGradientLayer.endPoint = CGPoint(x: 0, y: 1)
+        fadeOutTop.layer.insertSublayer(topGradientLayer, at: 0)
+
+        carouselContainer.addSubview(fadeOutTop)
+        NSLayoutConstraint.activate([
+            fadeOutTop.topAnchor.constraint(equalTo: carouselContainer.topAnchor),
+            fadeOutTop.leadingAnchor.constraint(equalTo: carouselContainer.leadingAnchor),
+            fadeOutTop.trailingAnchor.constraint(equalTo: carouselContainer.trailingAnchor),
+            fadeOutTop.heightAnchor.constraint(equalToConstant: 80)
+        ])
+
+        fadeOutBottom = UIView()
+        fadeOutBottom.backgroundColor = .clear
+        fadeOutBottom.translatesAutoresizingMaskIntoConstraints = false
+
+        let bottomGradientLayer = CAGradientLayer()
+        bottomGradientLayer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 148)
+        bottomGradientLayer.colors = [UIColor(red: 26/255, green: 26/255, blue: 26/255, alpha: 0).cgColor,
+                                      UIColor(red: 26/255, green: 26/255, blue: 26/255, alpha: 1).cgColor]
+        bottomGradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        bottomGradientLayer.endPoint = CGPoint(x: 0, y: 1)
+        fadeOutBottom.layer.insertSublayer(bottomGradientLayer, at: 0)
+
+        carouselContainer.addSubview(fadeOutBottom)
+        NSLayoutConstraint.activate([
+            fadeOutBottom.bottomAnchor.constraint(equalTo: carouselContainer.bottomAnchor),
+            fadeOutBottom.leadingAnchor.constraint(equalTo: carouselContainer.leadingAnchor),
+            fadeOutBottom.trailingAnchor.constraint(equalTo: carouselContainer.trailingAnchor),
+            fadeOutBottom.heightAnchor.constraint(equalToConstant: 148)
+        ])
+    }
+    
+    private func updateGenres(_ genres: [String]) {
+        for subview in labelsStackViewTop.arrangedSubviews {
+            subview.removeFromSuperview()
+        }
+        for subview in labelsStackViewBottom.arrangedSubviews {
+            subview.removeFromSuperview()
+        }
+        
+        var totalWidthTopLine = 0
+        var totalWidthBottomLine = 0
+        var totalGenresCount = 0
+        
+        for genre in genres {
+            let labelContainer = UIView()
+            labelContainer.backgroundColor = UIColor.darkFaded
+            labelContainer.layer.cornerRadius = 8
+            labelContainer.translatesAutoresizingMaskIntoConstraints = false
+            
+            let label = UILabel()
+            label.text = genre
+            label.font = UIFont(name: "Manrope-Medium", size: 16)
+            label.textColor = .white
+            label.translatesAutoresizingMaskIntoConstraints = false
+            let labelWidth = Int(label.intrinsicContentSize.width) + 24
+            
+            NSLayoutConstraint.activate([
+                labelContainer.widthAnchor.constraint(equalToConstant: label.intrinsicContentSize.width + 24),
+            ])
+            
+            labelContainer.addSubview(label)
+            
+            NSLayoutConstraint.activate([
+                label.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor, constant: 12),
+                label.trailingAnchor.constraint(equalTo: labelContainer.trailingAnchor, constant: -12),
+                label.topAnchor.constraint(equalTo: labelContainer.topAnchor, constant: 4),
+                label.bottomAnchor.constraint(equalTo: labelContainer.bottomAnchor, constant: -4)
+            ])
+            if totalGenresCount < 3 {
+                if totalWidthTopLine + labelWidth <= 211 {
+                    labelsStackViewTop.addArrangedSubview(labelContainer)
+                    totalWidthTopLine += labelWidth
+                } else if totalWidthBottomLine + labelWidth <= 211 {
+                    labelsStackViewBottom.addArrangedSubview(labelContainer)
+                    totalWidthBottomLine += labelWidth
+                }
+                totalGenresCount += 1
+            }
+        }
+    }
+}
+
+extension Collection {
+    subscript (safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
 }

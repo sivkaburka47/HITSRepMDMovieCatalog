@@ -33,6 +33,7 @@ class TabBarCustomViewController: UIViewController {
         
 
         showFeed()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

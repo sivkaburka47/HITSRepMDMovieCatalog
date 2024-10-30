@@ -161,6 +161,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .clear
+        
         view.addSubview(scrollView)
 
         NSLayoutConstraint.activate([
