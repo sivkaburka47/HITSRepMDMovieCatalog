@@ -57,6 +57,12 @@
 		E6FB14262CCE3F3C00E79D62 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14252CCE3F3300E79D62 /* ProfileModel.swift */; };
 		E6FB14282CCE432400E79D62 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14272CCE431E00E79D62 /* ProfileViewModel.swift */; };
 		E6FB142D2CCFAB9E00E79D62 /* MoviesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB142C2CCFAB9900E79D62 /* MoviesViewModel.swift */; };
+		E6FB14EF2CD207A300E79D62 /* GameDieButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14EE2CD2079E00E79D62 /* GameDieButtonView.swift */; };
+		E6FB14F12CD2AFB400E79D62 /* FavoriteAPIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14F02CD2AFA700E79D62 /* FavoriteAPIEndpoint.swift */; };
+		E6FB14F32CD2B01F00E79D62 /* FetchFavoritesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14F22CD2B00E00E79D62 /* FetchFavoritesUseCase.swift */; };
+		E6FB14F52CD2B8D700E79D62 /* FavoriteAddAPIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14F42CD2B8D500E79D62 /* FavoriteAddAPIEndpoint.swift */; };
+		E6FB14F72CD2B91E00E79D62 /* AddFavoriteUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14F62CD2B91500E79D62 /* AddFavoriteUseCase.swift */; };
+		E6FB14F92CD3C17600E79D62 /* FavoriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14F82CD3C17100E79D62 /* FavoriteCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -113,6 +119,12 @@
 		E6FB14252CCE3F3300E79D62 /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		E6FB14272CCE431E00E79D62 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		E6FB142C2CCFAB9900E79D62 /* MoviesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesViewModel.swift; sourceTree = "<group>"; };
+		E6FB14EE2CD2079E00E79D62 /* GameDieButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDieButtonView.swift; sourceTree = "<group>"; };
+		E6FB14F02CD2AFA700E79D62 /* FavoriteAPIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteAPIEndpoint.swift; sourceTree = "<group>"; };
+		E6FB14F22CD2B00E00E79D62 /* FetchFavoritesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFavoritesUseCase.swift; sourceTree = "<group>"; };
+		E6FB14F42CD2B8D500E79D62 /* FavoriteAddAPIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteAddAPIEndpoint.swift; sourceTree = "<group>"; };
+		E6FB14F62CD2B91500E79D62 /* AddFavoriteUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFavoriteUseCase.swift; sourceTree = "<group>"; };
+		E6FB14F82CD3C17100E79D62 /* FavoriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCell.swift; sourceTree = "<group>"; };
 		F8A5A6D7FFDD57B2C71C63F5 /* Pods-MDMovieCatalog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MDMovieCatalog.debug.xcconfig"; path = "Target Support Files/Pods-MDMovieCatalog/Pods-MDMovieCatalog.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -183,6 +195,8 @@
 		E64326682CC9812E007F6D47 /* Endpoints */ = {
 			isa = PBXGroup;
 			children = (
+				E6FB14F42CD2B8D500E79D62 /* FavoriteAddAPIEndpoint.swift */,
+				E6FB14F02CD2AFA700E79D62 /* FavoriteAPIEndpoint.swift */,
 				E69413892CCA32DC00C19F17 /* MovieAPIEndpoint.swift */,
 			);
 			path = Endpoints;
@@ -239,6 +253,8 @@
 		E64326752CC9812E007F6D47 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				E6FB14F62CD2B91500E79D62 /* AddFavoriteUseCase.swift */,
+				E6FB14F22CD2B00E00E79D62 /* FetchFavoritesUseCase.swift */,
 				E69413852CCA323700C19F17 /* FetchMoviesUseCase.swift */,
 				E64326732CC9812E007F6D47 /* LoginUserUseCase.swift */,
 				E64326742CC9812E007F6D47 /* RegisterUserUseCase.swift */,
@@ -267,6 +283,8 @@
 		E643267E2CC9812E007F6D47 /* Templates */ = {
 			isa = PBXGroup;
 			children = (
+				E6FB14F82CD3C17100E79D62 /* FavoriteCell.swift */,
+				E6FB14EE2CD2079E00E79D62 /* GameDieButtonView.swift */,
 				E6FB14232CCD835100E79D62 /* SignOutButtonView.swift */,
 				E694138D2CCAC76400C19F17 /* GradientOverlayView.swift */,
 				E64326792CC9812E007F6D47 /* BackButtonView.swift */,
@@ -572,6 +590,7 @@
 				E64326AA2CC9812E007F6D47 /* SceneDelegate.swift in Sources */,
 				E64326AB2CC9812E007F6D47 /* APIService.swift in Sources */,
 				E64326AC2CC9812E007F6D47 /* LoginCredentials.swift in Sources */,
+				E6FB14F32CD2B01F00E79D62 /* FetchFavoritesUseCase.swift in Sources */,
 				E69413842CCA322700C19F17 /* MovieRepository.swift in Sources */,
 				E64326AD2CC9812E007F6D47 /* RegistrationCredentials.swift in Sources */,
 				E6FB14242CCD835A00E79D62 /* SignOutButtonView.swift in Sources */,
@@ -583,20 +602,25 @@
 				E64326B22CC9812E007F6D47 /* AppRouter.swift in Sources */,
 				E64326B32CC9812E007F6D47 /* BackButtonView.swift in Sources */,
 				E69413822CCA321300C19F17 /* Movie.swift in Sources */,
+				E6FB14EF2CD207A300E79D62 /* GameDieButtonView.swift in Sources */,
 				E6FB14262CCE3F3C00E79D62 /* ProfileModel.swift in Sources */,
 				E64326B42CC9812E007F6D47 /* ButtonView.swift in Sources */,
 				E6FB142D2CCFAB9E00E79D62 /* MoviesViewModel.swift in Sources */,
 				E64326B52CC9812E007F6D47 /* GenderSwitchView.swift in Sources */,
 				E64326B62CC9812E007F6D47 /* InputFieldView.swift in Sources */,
 				E69413882CCA32C700C19F17 /* MovieDTO.swift in Sources */,
+				E6FB14F92CD3C17600E79D62 /* FavoriteCell.swift in Sources */,
 				E64326B72CC9812E007F6D47 /* TabBarCustomView.swift in Sources */,
 				E64326B82CC9812E007F6D47 /* SignInViewController.swift in Sources */,
 				E694138E2CCAC76F00C19F17 /* GradientOverlayView.swift in Sources */,
 				E64326B92CC9812E007F6D47 /* SignInViewModel.swift in Sources */,
+				E6FB14F12CD2AFB400E79D62 /* FavoriteAPIEndpoint.swift in Sources */,
 				E64326BA2CC9812E007F6D47 /* SignUpViewController.swift in Sources */,
 				E64326BB2CC9812E007F6D47 /* SignUpViewModel.swift in Sources */,
 				E694138A2CCA32E500C19F17 /* MovieAPIEndpoint.swift in Sources */,
+				E6FB14F52CD2B8D700E79D62 /* FavoriteAddAPIEndpoint.swift in Sources */,
 				E64326BC2CC9812E007F6D47 /* FavouritesViewController.swift in Sources */,
+				E6FB14F72CD2B91E00E79D62 /* AddFavoriteUseCase.swift in Sources */,
 				E64326BD2CC9812E007F6D47 /* FeedScreenViewModel.swift in Sources */,
 				E64326BE2CC9812E007F6D47 /* FeedViewController.swift in Sources */,
 				E6FB14282CCE432400E79D62 /* ProfileViewModel.swift in Sources */,

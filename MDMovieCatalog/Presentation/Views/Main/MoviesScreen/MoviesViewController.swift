@@ -8,10 +8,16 @@
 import UIKit
 import SDWebImage
 
-class MoviesViewController: UIViewController {
+class MoviesViewController: UIViewController{
     
     private var viewModel: MoviesViewModel!
     
+    private var favoritesCarousel: UICollectionView!
+    
+    private var images: [URL] = []
+    
+    
+    private var gameDieButton: GameDieButtonView!
     private var labelsStackViewTop: UIStackView!
     private var labelsStackViewBottom: UIStackView!
     private var movieNameLabel: UILabel!
@@ -37,6 +43,8 @@ class MoviesViewController: UIViewController {
         view.backgroundColor = UIColor.dark
         configureContainer()
         configureCarousel()
+        configureGameDieButton()
+        configureFavouritesCarousel()
 
         configureActivityIndicator()
         activityIndicator.startAnimating()
@@ -47,7 +55,13 @@ class MoviesViewController: UIViewController {
             }
         }
         
-
+        viewModel.fetchFavorites { [weak self] in
+            DispatchQueue.main.async {
+                self?.images = self?.viewModel.getMoviesForFavoritesCarousel().map { $0.coverImageURL } ?? []
+                self?.favoritesCarousel.reloadData()
+            }
+        }
+        
     }
 
     @objc private func handleCarouselTap(_ gesture: UITapGestureRecognizer) {
@@ -243,6 +257,96 @@ class MoviesViewController: UIViewController {
         updateProgress(to: currentStep)
     }
     
+    private func configureGameDieButton() {
+        gameDieButton = GameDieButtonView(title: "Случайный фильм", color: .orange)
+        gameDieButton.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(gameDieButton)
+        NSLayoutConstraint.activate([
+            gameDieButton.heightAnchor.constraint(equalToConstant: 96),
+            gameDieButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -24),
+            gameDieButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
+            gameDieButton.topAnchor.constraint(equalTo: carouselContainer.bottomAnchor, constant: 32),
+        ])
+    }
+    
+    private func configureFavouritesCarousel() {
+        let headerFavouritesCarousel = UIView()
+
+        headerFavouritesCarousel.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(headerFavouritesCarousel)
+        NSLayoutConstraint.activate([
+            headerFavouritesCarousel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -24),
+            headerFavouritesCarousel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
+            headerFavouritesCarousel.topAnchor.constraint(equalTo: gameDieButton.bottomAnchor, constant: 32),
+            headerFavouritesCarousel.heightAnchor.constraint(equalToConstant: 24)
+        ])
+        
+        let likedLabel = UILabel()
+        likedLabel.text = "Мне нравится"
+        likedLabel.font = UIFont(name: "Manrope-Bold", size: 20)
+        likedLabel.textColor = UIColor.grayCustom
+        likedLabel.textAlignment = .left
+        likedLabel.translatesAutoresizingMaskIntoConstraints = false
+        headerFavouritesCarousel.addSubview(likedLabel)
+        NSLayoutConstraint.activate([
+            likedLabel.leadingAnchor.constraint(equalTo: headerFavouritesCarousel.leadingAnchor),
+            likedLabel.centerYAnchor.constraint(equalTo: headerFavouritesCarousel.centerYAnchor),
+        ])
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [UIColor(red: 0.87, green: 0.15, blue: 0, alpha: 1).cgColor,
+                                UIColor(red: 1.0, green: 0.4, blue: 0.2, alpha: 1).cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        gradientLayer.frame = likedLabel.bounds
+        likedLabel.layoutIfNeeded()
+        gradientLayer.frame = likedLabel.bounds
+
+        let gradientImage = UIGraphicsImageRenderer(bounds: gradientLayer.bounds).image { context in
+            gradientLayer.render(in: context.cgContext)
+        }
+        likedLabel.textColor = UIColor(patternImage: gradientImage)
+        
+        
+        let allLabel = UILabel()
+        allLabel.text = "Все"
+        allLabel.font = UIFont(name: "Manrope-Bold", size: 20)
+        allLabel.textColor = UIColor.grayCustom
+        allLabel.textAlignment = .right
+        allLabel.translatesAutoresizingMaskIntoConstraints = false
+        headerFavouritesCarousel.addSubview(allLabel)
+        NSLayoutConstraint.activate([
+            allLabel.trailingAnchor.constraint(equalTo: headerFavouritesCarousel.trailingAnchor),
+            allLabel.centerYAnchor.constraint(equalTo: headerFavouritesCarousel.centerYAnchor),
+        ])
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 8
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
+        
+        favoritesCarousel = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        favoritesCarousel.translatesAutoresizingMaskIntoConstraints = false
+        favoritesCarousel.backgroundColor = .clear
+        favoritesCarousel.showsHorizontalScrollIndicator = false
+        
+        favoritesCarousel.delegate = self
+        favoritesCarousel.dataSource = self
+        favoritesCarousel.register(FavoriteCell.self, forCellWithReuseIdentifier: FavoriteCell.identifier)
+        
+        view.addSubview(favoritesCarousel)
+        
+        NSLayoutConstraint.activate([
+            favoritesCarousel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            favoritesCarousel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            favoritesCarousel.topAnchor.constraint(equalTo: headerFavouritesCarousel.bottomAnchor, constant: 16),
+            favoritesCarousel.heightAnchor.constraint(equalToConstant: 252)
+        ])
+        
+        
+    }
+    
+    
     private func startProgressTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
             guard let self = self else { return }
@@ -391,5 +495,30 @@ class MoviesViewController: UIViewController {
 extension Collection {
     subscript (safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
+    }
+}
+
+extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return images.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FavoriteCell.identifier, for: indexPath) as! FavoriteCell
+        if let imageURL = images[safe: indexPath.item] {
+            cell.imageView.sd_setImage(with: imageURL, completed: nil)
+        }
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let isMainCell = indexPath.item == 0 || (collectionView.contentOffset.x > CGFloat(indexPath.item) * (138 + 8))
+        return isMainCell ? CGSize(width: 166, height: 252) : CGSize(width: 138, height: 238)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let firstVisibleIndexPath = favoritesCarousel.indexPathsForVisibleItems.sorted().first else { return }
+        favoritesCarousel.reloadItems(at: [firstVisibleIndexPath])
     }
 }

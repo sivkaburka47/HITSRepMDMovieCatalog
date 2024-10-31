@@ -12,6 +12,10 @@ struct MovieResponse: Codable {
     let pageInfo: PageInfo
 }
 
+struct FavoriteResponse: Codable {
+    let movies: [MovieDTO]
+}
+
 struct MovieDTO: Codable {
     let id: String
     let name: String

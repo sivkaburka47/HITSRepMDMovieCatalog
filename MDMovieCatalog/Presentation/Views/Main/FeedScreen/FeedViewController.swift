@@ -279,6 +279,18 @@ class FeedViewController: UIViewController {
             if !toRight {
                 self.viewModel.addToDislikeMovies()
             }
+            else {
+                self.viewModel.addToFavorites { [weak self] result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success:
+                            print("Фильм успешно добавлен в избранное")
+                        case .failure(let error):
+                            print("Ошибка при добавлении фильма в избранное: \(error)")
+                        }
+                    }
+                }
+            }
             self.updateUI()
         }
     }

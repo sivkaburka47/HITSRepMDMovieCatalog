@@ -9,4 +9,6 @@ import Foundation
 
 protocol MovieRepository {
     func fetchMovies(page: Int, completion: @escaping (Result<[Movie], Error>) -> Void)
+    func fetchFavorites(token: String, completion: @escaping (Result<[Movie], Error>) -> Void)
+    func addFavorite(token: String, movieId: String, completion: @escaping (Result<Void, Error>) -> Void)
 }

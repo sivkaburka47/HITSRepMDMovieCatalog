@@ -13,6 +13,7 @@ class FeedViewModel {
     private var movies: [Movie] = []
     private var currentMovieIndex: Int = 0
     private var currentMoviePageIndex: Int = 0
+    private let addFavoriteUseCase: AddFavoriteUseCase
     private let fetchMoviesUseCase: FetchMoviesUseCase
     private var isLoadingNextPage: Bool = false
     private var currentMovie: Movie?
@@ -23,8 +24,10 @@ class FeedViewModel {
     var hideLoadingIndicator: (() -> Void)?
     
     // MARK: - Initialization
-    init(fetchMoviesUseCase: FetchMoviesUseCase = FetchMoviesUseCaseImpl(repository: MovieRepositoryImpl())) {
+    init(fetchMoviesUseCase: FetchMoviesUseCase = FetchMoviesUseCaseImpl(repository: MovieRepositoryImpl()),
+         addFavoriteUseCase: AddFavoriteUseCase = AddFavoriteUseCaseImpl(repository: MovieRepositoryImpl())) {
         self.fetchMoviesUseCase = fetchMoviesUseCase
+        self.addFavoriteUseCase = addFavoriteUseCase
         loadMovies()
     }
     
@@ -66,6 +69,15 @@ class FeedViewModel {
             UserDefaults.standard.set(dislikedMovies, forKey: "dislikedMovies")
         }
         print("ADD TO DISLIKE MOVIE: \(currentMovie?.title)")
+    }
+    
+    func addToFavorites(completion: @escaping (Result<Void, Error>) -> Void) {
+        let token = UserDefaults.standard.string(forKey: "authToken") ?? ""
+        if let currentMovie = currentMovie {
+            let movieId = String(currentMovie.id)
+            addFavoriteUseCase.execute(token: token, movieId: movieId, completion: completion)
+        }
+        print("ADD TO FAVORITES MOVIE: \(currentMovie?.title)")
     }
     
     // MARK: - Private Methods
