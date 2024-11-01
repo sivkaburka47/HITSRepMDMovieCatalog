@@ -77,10 +77,8 @@ class FeedViewModel {
             let movieId = String(currentMovie.id)
             addFavoriteUseCase.execute(token: token, movieId: movieId, completion: completion)
         }
-        print("ADD TO FAVORITES MOVIE: \(currentMovie?.title)")
     }
     
-    // MARK: - Private Methods
     private func loadMovies() {
         self.currentMoviePageIndex = 1
         showLoadingIndicator?()
@@ -91,6 +89,7 @@ class FeedViewModel {
                 self?.currentMovieIndex = 0
                 DispatchQueue.main.async {
                     self?.updateUI?()
+
                 }
             case .failure(let error):
                 print("Error fetching movies: \(error.localizedDescription)")

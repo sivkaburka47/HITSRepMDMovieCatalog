@@ -46,7 +46,7 @@ class SignUpViewController: UIViewController, InputFieldViewDelegate {
         viewModel.validationResult = { [weak self] (isValid, message) in
             guard let self = self else { return }
             if isValid {
-                self.showAlert(title: "Успех", message: message ?? "Регистрация прошла успешно", shouldNavigate: true)
+//                self.showAlert(title: "Успех", message: message ?? "Регистрация прошла успешно", shouldNavigate: true)
             } else {
                 self.showAlert(title: "Ошибка", message: message ?? "Неизвестная ошибка")
             }

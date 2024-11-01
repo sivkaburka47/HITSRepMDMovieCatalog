@@ -462,7 +462,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         ])
         
         helloTextLabel = UILabel()
-        helloTextLabel.text = "Доброе утро,"
+        helloTextLabel.text = ""
         helloTextLabel.font = UIFont(name: "Manrope-Medium", size: 16)
         helloTextLabel.textColor = .white
         helloTextLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -474,7 +474,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             helloTextLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
         userNameLabel = UILabel()
-        userNameLabel.text = "Васечка Пупкин"
+        userNameLabel.text = ""
         userNameLabel.font = UIFont(name: "Manrope-Bold", size: 24)
         userNameLabel.textColor = .white
         userNameLabel.translatesAutoresizingMaskIntoConstraints = false

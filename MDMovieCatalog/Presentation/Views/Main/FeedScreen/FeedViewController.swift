@@ -128,7 +128,7 @@ class FeedViewController: UIViewController {
         view.addSubview(headerImageView)
         NSLayoutConstraint.activate([
             headerImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            headerImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -16),
+            headerImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 24),
             headerImageView.heightAnchor.constraint(equalToConstant: 32)
         ])
     }

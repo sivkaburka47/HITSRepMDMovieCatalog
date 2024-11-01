@@ -50,5 +50,7 @@ extension Movie {
         self.year = movieDTO.year
         self.country = movieDTO.country
         self.genres = movieDTO.genres.map { $0.name }
+        self.reviews = movieDTO.reviews.map { $0.rating }
+        self.isFavorite = false
     }
 }

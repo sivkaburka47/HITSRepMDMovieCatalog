@@ -14,4 +14,6 @@ struct Movie {
     let year: Int
     let country: String
     let genres: [String]
+    let reviews: [Int]
+    var isFavorite: Bool
 }

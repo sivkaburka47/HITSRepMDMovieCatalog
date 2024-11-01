@@ -8,14 +8,15 @@
 import UIKit
 import SDWebImage
 
-class MoviesViewController: UIViewController{
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     private var viewModel: MoviesViewModel!
+    
+    private var tableView: UITableView!
     
     private var favoritesCarousel: UICollectionView!
     
     private var images: [URL] = []
-    
     
     private var gameDieButton: GameDieButtonView!
     private var labelsStackViewTop: UIStackView!
@@ -36,10 +37,18 @@ class MoviesViewController: UIViewController{
     private var fadeOutTop: UIView!
     private var fadeOutBottom: UIView!
     
+    init(appRouter: AppRouter) {
+        super.init(nibName: nil, bundle: nil)
+        self.viewModel = MoviesViewModel(appRouter: appRouter)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(true, animated: false)
-        viewModel = MoviesViewModel()
         view.backgroundColor = UIColor.dark
         configureContainer()
         configureCarousel()
@@ -62,6 +71,7 @@ class MoviesViewController: UIViewController{
             }
         }
         
+        configureAllMoviesContainer()
     }
 
     @objc private func handleCarouselTap(_ gesture: UITapGestureRecognizer) {
@@ -117,7 +127,7 @@ class MoviesViewController: UIViewController{
             containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            containerView.heightAnchor.constraint(equalToConstant: 1627)
+            containerView.heightAnchor.constraint(equalToConstant: 1427)
         ])
     }
     
@@ -342,10 +352,69 @@ class MoviesViewController: UIViewController{
             favoritesCarousel.topAnchor.constraint(equalTo: headerFavouritesCarousel.bottomAnchor, constant: 16),
             favoritesCarousel.heightAnchor.constraint(equalToConstant: 252)
         ])
-        
-        
+ 
     }
     
+    private func configureAllMoviesContainer() {
+        let headerAllMovies = UIView()
+
+        headerAllMovies.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(headerAllMovies)
+        NSLayoutConstraint.activate([
+            headerAllMovies.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -24),
+            headerAllMovies.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
+            headerAllMovies.topAnchor.constraint(equalTo: favoritesCarousel.bottomAnchor, constant: 32),
+            headerAllMovies.heightAnchor.constraint(equalToConstant: 24)
+        ])
+        
+        let allMoviesLabel = UILabel()
+        allMoviesLabel.text = "Все фильмы"
+        allMoviesLabel.font = UIFont(name: "Manrope-Bold", size: 20)
+        allMoviesLabel.textColor = UIColor.grayCustom
+        allMoviesLabel.textAlignment = .left
+        allMoviesLabel.translatesAutoresizingMaskIntoConstraints = false
+        headerAllMovies.addSubview(allMoviesLabel)
+        NSLayoutConstraint.activate([
+            allMoviesLabel.leadingAnchor.constraint(equalTo: headerAllMovies.leadingAnchor),
+            allMoviesLabel.centerYAnchor.constraint(equalTo: headerAllMovies.centerYAnchor),
+        ])
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [UIColor(red: 0.87, green: 0.15, blue: 0, alpha: 1).cgColor,
+                                UIColor(red: 1.0, green: 0.4, blue: 0.2, alpha: 1).cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        gradientLayer.frame = allMoviesLabel.bounds
+        allMoviesLabel.layoutIfNeeded()
+        gradientLayer.frame = allMoviesLabel.bounds
+
+        let gradientImage = UIGraphicsImageRenderer(bounds: gradientLayer.bounds).image { context in
+            gradientLayer.render(in: context.cgContext)
+        }
+        allMoviesLabel.textColor = UIColor(patternImage: gradientImage)
+        
+        tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .clear
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.separatorStyle = .none
+        tableView.register(MovieRowCell.self, forCellReuseIdentifier: MovieRowCell.identifier)
+        containerView.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: headerAllMovies.bottomAnchor, constant: 16),
+            tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
+            tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
+            tableView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        ])
+        
+        viewModel.fetchAllMovies { [weak self] in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
+    }
     
     private func startProgressTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
@@ -490,6 +559,32 @@ class MoviesViewController: UIViewController{
             }
         }
     }
+    
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return (viewModel.getAllMovies().count ) / 3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: MovieRowCell.identifier, for: indexPath) as! MovieRowCell
+        cell.backgroundColor = .clear
+        cell.contentView.backgroundColor = .clear
+        let startIndex = indexPath.row * 3
+        let endIndex = min(startIndex + 3, viewModel.getAllMovies().count)
+        let movies = Array(viewModel.getAllMovies()[startIndex..<endIndex])
+        cell.configure(with: movies)
+        return cell
+    }
+    
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let startIndex = (indexPath.row + 1) * 3
+        viewModel.loadNextPageIfNeeded(currentIndex: startIndex) { [weak self] in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
+    }
 }
 
 extension Collection {
@@ -522,3 +617,4 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
         favoritesCarousel.reloadItems(at: [firstVisibleIndexPath])
     }
 }
+

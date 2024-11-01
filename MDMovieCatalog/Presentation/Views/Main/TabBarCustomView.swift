@@ -157,7 +157,7 @@ class TabBarCustomViewController: UIViewController {
     }
     
     @objc private func showMovies() {
-        let moviesViewController = MoviesViewController()
+        let moviesViewController = MoviesViewController(appRouter: appRouter)
         displayContentController(moviesViewController)
         updateTabBarSelection(selectedIndex: 1)
     }

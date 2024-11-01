@@ -63,6 +63,7 @@
 		E6FB14F52CD2B8D700E79D62 /* FavoriteAddAPIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14F42CD2B8D500E79D62 /* FavoriteAddAPIEndpoint.swift */; };
 		E6FB14F72CD2B91E00E79D62 /* AddFavoriteUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14F62CD2B91500E79D62 /* AddFavoriteUseCase.swift */; };
 		E6FB14F92CD3C17600E79D62 /* FavoriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14F82CD3C17100E79D62 /* FavoriteCell.swift */; };
+		E6FB14FB2CD4B08B00E79D62 /* MovieRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14FA2CD4B08400E79D62 /* MovieRowCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -125,6 +126,7 @@
 		E6FB14F42CD2B8D500E79D62 /* FavoriteAddAPIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteAddAPIEndpoint.swift; sourceTree = "<group>"; };
 		E6FB14F62CD2B91500E79D62 /* AddFavoriteUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFavoriteUseCase.swift; sourceTree = "<group>"; };
 		E6FB14F82CD3C17100E79D62 /* FavoriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCell.swift; sourceTree = "<group>"; };
+		E6FB14FA2CD4B08400E79D62 /* MovieRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRowCell.swift; sourceTree = "<group>"; };
 		F8A5A6D7FFDD57B2C71C63F5 /* Pods-MDMovieCatalog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MDMovieCatalog.debug.xcconfig"; path = "Target Support Files/Pods-MDMovieCatalog/Pods-MDMovieCatalog.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -283,6 +285,7 @@
 		E643267E2CC9812E007F6D47 /* Templates */ = {
 			isa = PBXGroup;
 			children = (
+				E6FB14FA2CD4B08400E79D62 /* MovieRowCell.swift */,
 				E6FB14F82CD3C17100E79D62 /* FavoriteCell.swift */,
 				E6FB14EE2CD2079E00E79D62 /* GameDieButtonView.swift */,
 				E6FB14232CCD835100E79D62 /* SignOutButtonView.swift */,
@@ -615,6 +618,7 @@
 				E694138E2CCAC76F00C19F17 /* GradientOverlayView.swift in Sources */,
 				E64326B92CC9812E007F6D47 /* SignInViewModel.swift in Sources */,
 				E6FB14F12CD2AFB400E79D62 /* FavoriteAPIEndpoint.swift in Sources */,
+				E6FB14FB2CD4B08B00E79D62 /* MovieRowCell.swift in Sources */,
 				E64326BA2CC9812E007F6D47 /* SignUpViewController.swift in Sources */,
 				E64326BB2CC9812E007F6D47 /* SignUpViewModel.swift in Sources */,
 				E694138A2CCA32E500C19F17 /* MovieAPIEndpoint.swift in Sources */,
