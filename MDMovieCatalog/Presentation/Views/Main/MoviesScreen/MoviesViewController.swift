@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MovieRowCellDelegate {
     
     private var viewModel: MoviesViewModel!
     
@@ -263,6 +263,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             lookButton.trailingAnchor.constraint(equalTo: infoBlock.trailingAnchor),
             lookButton.bottomAnchor.constraint(equalTo: infoBlock.bottomAnchor),
         ])
+        lookButton.addTarget(self, action: #selector(lookButtonTapped), for: .touchUpInside)
         
         updateProgress(to: currentStep)
     }
@@ -277,6 +278,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             gameDieButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
             gameDieButton.topAnchor.constraint(equalTo: carouselContainer.bottomAnchor, constant: 32),
         ])
+        gameDieButton.addTarget(self, action: #selector(didTapGameDieButton), for: .touchUpInside)
+    }
+    
+    @objc private func lookButtonTapped() {
+        viewModel.getCarouselMoviesDetails()
+    }
+    
+    @objc private func didTapGameDieButton() {
+        viewModel.getRandMovieDetails()
     }
     
     private func configureFavouritesCarousel() {
@@ -573,6 +583,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let endIndex = min(startIndex + 3, viewModel.getAllMovies().count)
         let movies = Array(viewModel.getAllMovies()[startIndex..<endIndex])
         cell.configure(with: movies)
+        cell.delegate = self
         return cell
     }
     
@@ -584,6 +595,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 self?.tableView.reloadData()
             }
         }
+    }
+    
+    func didTapCover(for movieId: String) {
+        viewModel.getAllMoviesDetails(id: movieId)
     }
 }
 

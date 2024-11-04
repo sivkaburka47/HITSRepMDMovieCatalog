@@ -47,7 +47,7 @@ class ProfileViewModel {
             
             if statusCode == 401 {
                 DispatchQueue.main.async {
-                    self?.logOut()
+                    self?.appRouter.logout()
                 }
                 return
             }
@@ -75,10 +75,6 @@ class ProfileViewModel {
         
     }
     
-    func logOut() {
-        UserDefaults.standard.removeObject(forKey: "authToken")
-        appRouter.start()
-    }
     
     private func formatISO8601ToCustomDate(_ dateString: String) -> String {
         let dateFormatter = DateFormatter()
@@ -171,5 +167,9 @@ class ProfileViewModel {
         iso8601Formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         
         return iso8601Formatter.string(from: date)
+    }
+    
+    func logOut() {
+        appRouter.logout()
     }
 }

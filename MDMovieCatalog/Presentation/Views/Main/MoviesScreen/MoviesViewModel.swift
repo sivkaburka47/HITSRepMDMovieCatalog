@@ -8,6 +8,7 @@
 import Foundation
 
 class MoviesViewModel {
+    private var carouselMoviesIndex: Int = 1
     private var currentPage: Int = 2
     private var allMovies: [Movie] = []
     private var moviesCarousel: [Movie] = []
@@ -33,7 +34,7 @@ class MoviesViewModel {
             case .failure(let error):
                 if let nsError = error as NSError?, nsError.domain == "Unauthorized", nsError.code == 401 {
                     DispatchQueue.main.async {
-                        self?.logOut()
+                        self?.appRouter.logout()
                     }
                     return
                 } else {
@@ -54,7 +55,7 @@ class MoviesViewModel {
             case .failure(let error):
                 if let nsError = error as NSError?, nsError.domain == "Unauthorized", nsError.code == 401 {
                     DispatchQueue.main.async {
-                        self?.logOut()
+                        self?.appRouter.logout()
                     }
                     return
                 } else {
@@ -67,6 +68,7 @@ class MoviesViewModel {
     }
     
     func getCurrentMovieForCarousel(index: Int) -> Movie? {
+        carouselMoviesIndex = index
         return moviesCarousel[index]
     }
     
@@ -120,9 +122,20 @@ class MoviesViewModel {
         return allMovies
     }
     
-    func logOut() {
-        UserDefaults.standard.removeObject(forKey: "authToken")
-        appRouter.start()
+    func getRandMovieDetails() {
+        let randIndex = Int.random(in: 0..<allMovies.count)
+        let idRandMovie = allMovies[randIndex].id
+        appRouter.navigateToDetails(idRandMovie: idRandMovie)
     }
+    
+    func getCarouselMoviesDetails() {
+        let idMovie = moviesCarousel[carouselMoviesIndex].id
+        appRouter.navigateToDetails(idRandMovie: idMovie)
+    }
+    
+    func getAllMoviesDetails(id: String) {
+        appRouter.navigateToDetails(idRandMovie: id)
+    }
+    
 
 }

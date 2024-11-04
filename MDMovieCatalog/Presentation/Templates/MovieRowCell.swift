@@ -7,8 +7,15 @@
 import UIKit
 import SDWebImage
 
+protocol MovieRowCellDelegate: AnyObject {
+    func didTapCover(for movieId: String)
+}
+
+
 class MovieRowCell: UITableViewCell {
     static let identifier = "MovieRowCell"
+    
+    weak var delegate: MovieRowCellDelegate?
     
     private var imageViews: [UIImageView] = []
     private var ratingLabels: [UILabel] = []
@@ -81,6 +88,10 @@ class MovieRowCell: UITableViewCell {
                 favoriteIcon.widthAnchor.constraint(equalToConstant: 22),
                 favoriteIcon.heightAnchor.constraint(equalToConstant: 22)
             ])
+            
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+            imageView.isUserInteractionEnabled = true
+            imageView.addGestureRecognizer(tapGesture)
         }
     }
     
@@ -105,12 +116,20 @@ class MovieRowCell: UITableViewCell {
                 } else {
                     favoriteIcons[index].image = nil
                 }
+                
+                imageViews[index].accessibilityIdentifier = movie.id
             } else {
                 imageView.image = nil
                 ratingLabels[index].text = nil
                 ratingLabels[index].backgroundColor = .clear
                 favoriteIcons[index].image = nil
             }
+        }
+    }
+    
+    @objc private func handleTap(_ sender: UITapGestureRecognizer) {
+        if let coverImageView = sender.view as? UIImageView, let movieId = coverImageView.accessibilityIdentifier {
+            delegate?.didTapCover(for: movieId)
         }
     }
     

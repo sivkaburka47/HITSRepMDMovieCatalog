@@ -120,5 +120,42 @@ class MovieRepositoryImpl: MovieRepository {
         task.resume()
     }
     
+    func deleteFavorite(token: String, movieId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let url = FavoriteDeleteAPIEndpoint.deleteFavorite(token: token, movieId: movieId) else {
+            completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(.failure(NSError(domain: "Invalid response", code: -1, userInfo: nil)))
+                return
+            }
+            
+            if httpResponse.statusCode == 401 {
+                print("Требуется повторная авторизация")
+                completion(.failure(NSError(domain: "Unauthorized", code: 401, userInfo: nil)))
+                return
+            }
+            
+            if httpResponse.statusCode == 200 {
+                completion(.success(()))
+            } else {
+                completion(.failure(NSError(domain: "Server error", code: httpResponse.statusCode, userInfo: nil)))
+            }
+        }
+        
+        task.resume()
+    }
+    
 
 }

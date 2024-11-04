@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class TabBarCustomViewController: UIViewController {
     
@@ -31,9 +32,9 @@ class TabBarCustomViewController: UIViewController {
         configureTabBarBackgroundView()
         configureTabBarItems()
         
-
-        showFeed()
-        
+        DispatchQueue.main.async {
+            self.appRouter.navigateToFeed()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -78,10 +79,10 @@ class TabBarCustomViewController: UIViewController {
         self.stackView = stackView
         
         tabBarItems = [
-            createTabBarItem(title: "Лента", icon: UIImage(named: "feed")!, target: self, action: #selector(showFeed)),
-            createTabBarItem(title: "Фильмы", icon: UIImage(named: "movies")!, target: self, action: #selector(showMovies)),
-            createTabBarItem(title: "Избранное", icon: UIImage(named: "favourites")!, target: self, action: #selector(showFavourites)),
-            createTabBarItem(title: "Профиль", icon: UIImage(named: "profile")!, target: self, action: #selector(showProfile))
+            createTabBarItem(title: "Лента", icon: UIImage(named: "feed")!, target: self, action: #selector(handleFeedTap)),
+            createTabBarItem(title: "Фильмы", icon: UIImage(named: "movies")!, target: self, action: #selector(handleMoviesTap)),
+            createTabBarItem(title: "Избранное", icon: UIImage(named: "favourites")!, target: self, action: #selector(handleFavouritesTap)),
+            createTabBarItem(title: "Профиль", icon: UIImage(named: "profile")!, target: self, action: #selector(handleProfileTap))
         ]
         
         for item in tabBarItems {
@@ -129,7 +130,7 @@ class TabBarCustomViewController: UIViewController {
         return itemView
     }
     
-    private func displayContentController(_ content: UIViewController) {
+    internal func displayContentController(_ content: UIViewController) {
         if let currentVC = currentViewController {
             currentVC.willMove(toParent: nil)
             currentVC.view.removeFromSuperview()
@@ -150,31 +151,23 @@ class TabBarCustomViewController: UIViewController {
         currentViewController = content
     }
     
-    @objc private func showFeed() {
-        let feedViewController = FeedViewController()
-        displayContentController(feedViewController)
-        updateTabBarSelection(selectedIndex: 0)
+    @objc private func handleFeedTap() {
+        appRouter.navigateToFeed()
     }
     
-    @objc private func showMovies() {
-        let moviesViewController = MoviesViewController(appRouter: appRouter)
-        displayContentController(moviesViewController)
-        updateTabBarSelection(selectedIndex: 1)
+    @objc private func handleMoviesTap() {
+        appRouter.navigateToMovies()
     }
     
-    @objc private func showFavourites() {
-        let favouritesViewController = FavouritesViewController()
-        displayContentController(favouritesViewController)
-        updateTabBarSelection(selectedIndex: 2)
+    @objc private func handleFavouritesTap() {
+        appRouter.navigateToFavourites()
     }
     
-    @objc private func showProfile() {
-        let profileViewController = ProfileViewController(appRouter: appRouter)
-        displayContentController(profileViewController)
-        updateTabBarSelection(selectedIndex: 3)
+    @objc private func handleProfileTap() {
+        appRouter.navigateToProfile()
     }
     
-    private func updateTabBarSelection(selectedIndex: Int) {
+    func updateTabBarSelection(selectedIndex: Int) {
         for (index, item) in tabBarItems.enumerated() {
             if let label = item.subviews.compactMap({ $0 as? UILabel }).first,
                let iconView = item.subviews.compactMap({ $0 as? UIImageView }).first {
@@ -210,20 +203,13 @@ class TabBarCustomViewController: UIViewController {
                     iconView.layer.addSublayer(iconGradientLayer)
                     label.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
                     label.layer.addSublayer(gradientLayer)
-
                 } else {
                     label.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
                     label.textColor = UIColor.grayFaded
-                    
-
                     iconView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
                     iconView.tintColor = UIColor.grayFaded
                 }
             }
         }
     }
-
-
-    
-    
 }

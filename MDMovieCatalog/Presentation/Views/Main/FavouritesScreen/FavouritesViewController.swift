@@ -5,14 +5,10 @@
 //  Created by Станислав Дейнекин on 22.10.2024.
 //
 
-import UIKit
+import SwiftUI
 
-class FavouritesViewController: UIViewController {
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .green
+struct FavouritesViewController: View {
+    var body: some View {
+        Text("FavouritesViewController")
     }
-    
 }
