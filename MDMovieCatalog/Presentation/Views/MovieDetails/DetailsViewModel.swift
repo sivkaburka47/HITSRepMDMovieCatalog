@@ -8,7 +8,7 @@
 import Foundation
 
 class DetailsViewModel: ObservableObject {
-    private var profile: ProfileModel?
+    @Published var profile: ProfileModel?
     @Published var filmKinopoisk: FilmItemKinoPoisk?
     @Published var movieDetails: MovieDetails?
     @Published var director: PersonItemKinopoisk?
@@ -23,6 +23,7 @@ class DetailsViewModel: ObservableObject {
     @Published var isAnonymous: Bool = false
     @Published var isReviewWritten: Bool = false
     @Published var reviewId: String = ""
+    
     
     private let deleteFavoriteUseCase: DeleteFavoriteUseCase
     private let addFavoriteUseCase: AddFavoriteUseCase
@@ -464,6 +465,35 @@ class DetailsViewModel: ObservableObject {
         }
         
         task.resume()
+    }
+    
+    func addFriend(author: Author, idMovie: String, rating: Int) {
+        let friend = Friend(userId: author.userId, nickName: author.nickName ?? "", avatar: author.avatar, moviesID: idMovie, rating: rating)
+        
+        var friends: [Friend] = []
+        if let savedFriendsData = UserDefaults.standard.data(forKey: "Friends"),
+           let savedFriends = try? JSONDecoder().decode([Friend].self, from: savedFriendsData) {
+            friends = savedFriends
+        }
+        
+        let existingFriend = friends.first { $0.userId == author.userId && $0.moviesID == idMovie }
+        if existingFriend == nil {
+            friends.append(friend)
+            
+            let encoder = JSONEncoder()
+            if let encoded = try? encoder.encode(friends) {
+                UserDefaults.standard.set(encoded, forKey: "Friends")
+            }
+        }
+    }
+    
+    func getFriendCount(forMovieId movieId: String, withRatingGreaterThan rating: Int = 5) -> Int {
+        if let savedFriendsData = UserDefaults.standard.data(forKey: "Friends"),
+           let savedFriends = try? JSONDecoder().decode([Friend].self, from: savedFriendsData) {
+            let friendsForMovie = savedFriends.filter { $0.moviesID == movieId && $0.rating > rating }
+            return friendsForMovie.count
+        }
+        return 0
     }
 }
 

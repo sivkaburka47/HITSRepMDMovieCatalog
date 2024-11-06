@@ -350,6 +350,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             friendsContainer.bottomAnchor.constraint(equalTo: blockNameLabel.topAnchor,constant: -35),
             friendsContainer.heightAnchor.constraint(equalToConstant: 64)
         ])
+        let tapGestureFriends = UITapGestureRecognizer(target: self, action: #selector(friendsDidTap))
+        friendsContainer.addGestureRecognizer(tapGestureFriends)
+
         
         friendsAvatarsContainer = UIView()
         friendsAvatarsContainer.backgroundColor = .clear
@@ -470,7 +473,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         NSLayoutConstraint.activate([
             helloTextLabel.leadingAnchor.constraint(equalTo: helloContainer.leadingAnchor),
             helloTextLabel.trailingAnchor.constraint(equalTo: helloContainer.trailingAnchor),
-            helloTextLabel.topAnchor.constraint(equalTo: helloContainer.topAnchor),
+            helloTextLabel.topAnchor.constraint(equalTo: helloContainer.topAnchor, constant: 16),
             helloTextLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
         userNameLabel = UILabel()
@@ -495,7 +498,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             userNameLabel.leadingAnchor.constraint(equalTo: helloContainer.leadingAnchor),
             userNameLabel.trailingAnchor.constraint(equalTo: helloContainer.trailingAnchor),
             userNameLabel.topAnchor.constraint(equalTo: helloTextLabel.bottomAnchor),
-            userNameLabel.heightAnchor.constraint(equalToConstant: 64)
+            userNameLabel.heightAnchor.constraint(equalToConstant: 32)
         ])
         
         
@@ -504,6 +507,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     
     @objc private func sigOutDidTap() {
         viewModel.logOut()
+    }
+    
+    @objc private func friendsDidTap() {
+        viewModel.openFriends()
     }
     
 }

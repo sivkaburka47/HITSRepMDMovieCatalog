@@ -78,10 +78,22 @@ class AppRouter {
         }
     }
     
-    func logout() {
+    func navigateToFriends() {
+        let viewModel = FriendsViewModel()
+        let friendsViewController = FriendsViewController(viewModel: viewModel)
+        self.navigationController?.pushViewController(friendsViewController, animated: true)
+    }
+    
+    func logout(forced: Bool = false) {
         UserDefaults.standard.removeObject(forKey: "authToken")
+        if forced {
+            UserDefaults.standard.removeObject(forKey: "dislikedMovies")
+            UserDefaults.standard.removeObject(forKey: "Friends")
+        }
+        
         start()
     }
+    
     
     func navigateToDetails(idRandMovie: String) {
         let viewModel = DetailsViewModel(appRouter: self)

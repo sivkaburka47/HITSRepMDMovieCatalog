@@ -170,6 +170,10 @@ class ProfileViewModel {
     }
     
     func logOut() {
-        appRouter.logout()
+        appRouter.logout(forced: true)
+    }
+    
+    func openFriends() {
+        appRouter.navigateToFriends()
     }
 }

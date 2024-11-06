@@ -116,20 +116,22 @@ struct DetailsView: View {
                                 )
                                 .clipShape(RoundedRectangle(cornerRadius: 16))
                                 
-                                VStack(alignment: .leading) {
-                                    HStack(spacing: 8) {
-                                        Image("avatarcombo")
-                                            .resizable()
-                                            .frame(width: 80, height: 32)
-                                        Text("нравится 3 вашим друзьям")
-                                            .font(.custom("Manrope-Medium", size: 16))
-                                            .foregroundColor(.white)
+                                if viewModel.getFriendCount(forMovieId: idRandMovie) > 0 {
+                                    VStack(alignment: .leading) {
+                                        HStack(spacing: 8) {
+                                            Image("avatarcombo")
+                                                .resizable()
+                                                .frame(width: 80, height: 32)
+                                            Text("нравится \(viewModel.getFriendCount(forMovieId: idRandMovie)) вашим друзьям")
+                                                .font(.custom("Manrope-Medium", size: 16))
+                                                .foregroundColor(.white)
+                                        }
                                     }
+                                    .padding(16)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(.darkFaded)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16))
                                 }
-                                .padding(16)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(.darkFaded)
-                                .clipShape(RoundedRectangle(cornerRadius: 16))
                                 
                                 
                                 VStack(alignment: .leading) {
@@ -453,22 +455,42 @@ struct DetailsView: View {
                                                                     .scaledToFill()
                                                                     .frame(width: 32, height: 32)
                                                                     .clipShape(Circle())
+                                                                    .onTapGesture {
+                                                                        if review.author.nickName != viewModel.profile?.nickName {
+                                                                            viewModel.addFriend(author: review.author, idMovie: idRandMovie, rating: review.rating)
+                                                                        }
+                                                                    }
                                                             case .failure:
                                                                 Image("anonym")
                                                                     .resizable()
                                                                     .scaledToFit()
                                                                     .frame(width: 32, height: 32)
+                                                                    .onTapGesture {
+                                                                        if review.author.nickName != viewModel.profile?.nickName {
+                                                                            viewModel.addFriend(author: review.author, idMovie: idRandMovie, rating: review.rating)
+                                                                        }
+                                                                    }
                                                             @unknown default:
                                                                 Image("anonym")
                                                                     .resizable()
                                                                     .scaledToFit()
                                                                     .frame(width: 32, height: 32)
+                                                                    .onTapGesture {
+                                                                        if review.author.nickName != viewModel.profile?.nickName {
+                                                                            viewModel.addFriend(author: review.author, idMovie: idRandMovie, rating: review.rating)
+                                                                        }
+                                                                    }
                                                             }
                                                         }
                                                         VStack(alignment: .leading) {
                                                             Text(review.author.nickName ?? "Анонимный пользователь")
                                                                 .font(.custom("Manrope-Medium", size: 12))
                                                                 .foregroundColor(.white)
+                                                                .onTapGesture {
+                                                                    if review.author.nickName != viewModel.profile?.nickName {
+                                                                        viewModel.addFriend(author: review.author, idMovie: idRandMovie, rating: review.rating)
+                                                                    }
+                                                                }
                                                             Text(formattedDate(from: review.createDateTime))
                                                                 .font(.custom("Manrope-Medium", size: 12))
                                                                 .foregroundColor(.grayFaded)
@@ -676,11 +698,10 @@ struct DetailsView: View {
                             Button(action: {
                                 if viewModel.isReviewWritten {
                                     viewModel.didTapEditReview(movieId: idRandMovie)
-                                }
-                                else {
+                                } else {
                                     viewModel.didTapAddReview(movieId: idRandMovie)
                                 }
-                                    
+                                
                                 showAddReviewPopup = false
                                 print("Review submitted")
                             }) {
@@ -700,6 +721,8 @@ struct DetailsView: View {
                                     )
                                     .cornerRadius(8)
                             }
+                            .disabled(viewModel.reviewText.isEmpty)
+                            .opacity(viewModel.reviewText.isEmpty ? 0.5 : 1.0)
                         }
                     }
                     .padding(24)

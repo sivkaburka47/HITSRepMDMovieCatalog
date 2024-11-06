@@ -362,7 +362,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             favoritesCarousel.topAnchor.constraint(equalTo: headerFavouritesCarousel.bottomAnchor, constant: 16),
             favoritesCarousel.heightAnchor.constraint(equalToConstant: 252)
         ])
- 
+        
     }
     
     private func configureAllMoviesContainer() {
