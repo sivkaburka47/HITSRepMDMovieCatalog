@@ -23,9 +23,12 @@ class FeedViewModel {
     var showLoadingIndicator: (() -> Void)?
     var hideLoadingIndicator: (() -> Void)?
     
+    private var appRouter: AppRouter
+    
     // MARK: - Initialization
-    init(fetchMoviesUseCase: FetchMoviesUseCase = FetchMoviesUseCaseImpl(repository: MovieRepositoryImpl()),
+    init(appRouter: AppRouter, fetchMoviesUseCase: FetchMoviesUseCase = FetchMoviesUseCaseImpl(repository: MovieRepositoryImpl()),
          addFavoriteUseCase: AddFavoriteUseCase = AddFavoriteUseCaseImpl(repository: MovieRepositoryImpl())) {
+        self.appRouter = appRouter
         self.fetchMoviesUseCase = fetchMoviesUseCase
         self.addFavoriteUseCase = addFavoriteUseCase
         loadMovies()
@@ -135,5 +138,9 @@ class FeedViewModel {
             let movieIdString = String(movie.id)
             return !dislikedMovies.contains(movieIdString)
         }
+    }
+    
+    func navigateToMovieDetails() {
+        appRouter.navigateToDetails(idRandMovie: movies[currentMovieIndex].id)
     }
 }

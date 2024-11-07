@@ -24,11 +24,19 @@ class FeedViewController: UIViewController {
     
     private var viewModel: FeedViewModel!
     private var isLoading: Bool = false
+    
+    init(viewModel: FeedViewModel) {
+        super.init(nibName: nil, bundle: nil)
+        self.viewModel = viewModel
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.dark
-        viewModel = FeedViewModel()
         viewModel.updateUI = { [weak self] in
             self?.updateUI()
         }
@@ -211,6 +219,9 @@ class FeedViewController: UIViewController {
         movieCover.translatesAutoresizingMaskIntoConstraints = false
         movieCover.layer.cornerRadius = 16
         movieCover.layer.masksToBounds = true
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapCover))
+        movieCover.isUserInteractionEnabled = true
+        movieCover.addGestureRecognizer(tapGestureRecognizer)
         swipeContainerView.addSubview(movieCover)
         NSLayoutConstraint.activate([
             movieCover.leadingAnchor.constraint(equalTo: swipeContainerView.leadingAnchor),
@@ -218,6 +229,7 @@ class FeedViewController: UIViewController {
             movieCover.topAnchor.constraint(equalTo: swipeContainerView.topAnchor),
             movieCover.bottomAnchor.constraint(equalTo: infoContainerView.topAnchor, constant: -24)
         ])
+
     }
     
     private func setupGestures() {
@@ -341,5 +353,9 @@ class FeedViewController: UIViewController {
             
             labelsStackView.addArrangedSubview(labelContainer)
         }
+    }
+    
+    @objc private func didTapCover() {
+        viewModel.navigateToMovieDetails()
     }
 }

@@ -589,7 +589,7 @@ struct DetailsView: View {
                                                 .padding(.trailing, 24)
                                                 .frame(maxWidth: .infinity, alignment: .trailing)
                                             }
-                                            HStack (spacing: 4){
+                                            HStack(spacing: 4) {
                                                 Button(action: {
                                                     if currentReviewIndex > 0 {
                                                         currentReviewIndex -= 1
@@ -598,10 +598,12 @@ struct DetailsView: View {
                                                     Image("ChevronLeft")
                                                         .renderingMode(.template)
                                                         .frame(width: 40, height: 40)
-                                                        .foregroundColor(.white)
-                                                        .background(Color.dark)
+                                                        .foregroundColor(currentReviewIndex == 0 ? Color.white.opacity(0.5) : Color.white)
+                                                        .background(currentReviewIndex == 0 ? Color.darkFaded : Color.dark)
                                                         .clipShape(RoundedRectangle(cornerRadius: 8))
                                                 }
+                                                .disabled(currentReviewIndex == 0)
+                                                
                                                 Button(action: {
                                                     if currentReviewIndex < reviews.count - 1 {
                                                         currentReviewIndex += 1
@@ -610,10 +612,11 @@ struct DetailsView: View {
                                                     Image("ChevronRight")
                                                         .renderingMode(.template)
                                                         .frame(width: 40, height: 40)
-                                                        .foregroundColor(.white)
-                                                        .background(Color.dark)
+                                                        .foregroundColor(currentReviewIndex == reviews.count - 1 ? Color.white.opacity(0.5) : Color.white)
+                                                        .background(currentReviewIndex == reviews.count - 1 ? Color.darkFaded : Color.dark)
                                                         .clipShape(RoundedRectangle(cornerRadius: 8))
                                                 }
+                                                .disabled(currentReviewIndex == reviews.count - 1)
                                             }
                                         }
                                         
