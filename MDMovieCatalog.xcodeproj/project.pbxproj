@@ -555,20 +555,11 @@
 		E6CAEAA13096132C00C7B028 /* Kreosoft */ = {
 			isa = PBXGroup;
 			children = (
-				E6CAEAA23096137500C7B028 /* Gender.swift */,
-				E6CAEAA4309614AB00C7B028 /* UserRegisterModel.swift */,
-				E6CAEAA63096157F00C7B028 /* LoginCredentials.swift */,
-				E6CAEAA83096160400C7B028 /* GenreModel.swift */,
-				E6CAEAAA3096165700C7B028 /* ReviewShortModel.swift */,
-				E6CAEAAC3096168100C7B028 /* MovieElementModel.swift */,
-				E6CAEAAE309616F700C7B028 /* MoviesListModel.swift */,
-				E6CAEAB03096171E00C7B028 /* PageInfoModel.swift */,
-				E6CAEAB23096174900C7B028 /* MoviesPagedListModel.swift */,
-				E6CAEAB43096179000C7B028 /* UserShortModel.swift */,
-				E6CAEAB6309617B500C7B028 /* ReviewModel.swift */,
-				E6CAEAB83096181200C7B028 /* MovieDetailsModel.swift */,
-				E6CAEABA3096188F00C7B028 /* ReviewModifyModel.swift */,
-				E6CAEABC309619D400C7B028 /* ProfileModel.swift */,
+				E6CAEAD13096398B00C7B028 /* Pagination */,
+				E6CAEAD03096398500C7B028 /* Auth */,
+				E6CAEACF3096397F00C7B028 /* User */,
+				E6CAEACE3096397900C7B028 /* Review */,
+				E6CAEACD3096397200C7B028 /* Movie */,
 			);
 			path = Kreosoft;
 			sourceTree = "<group>";
@@ -600,6 +591,55 @@
 				E6CAEACB309628D000C7B028 /* FilmSearchByFiltersResponseItem.swift */,
 			);
 			path = Movie;
+			sourceTree = "<group>";
+		};
+		E6CAEACD3096397200C7B028 /* Movie */ = {
+			isa = PBXGroup;
+			children = (
+				E6CAEAA83096160400C7B028 /* GenreModel.swift */,
+				E6CAEAAC3096168100C7B028 /* MovieElementModel.swift */,
+				E6CAEAAE309616F700C7B028 /* MoviesListModel.swift */,
+				E6CAEAB23096174900C7B028 /* MoviesPagedListModel.swift */,
+				E6CAEAB83096181200C7B028 /* MovieDetailsModel.swift */,
+			);
+			path = Movie;
+			sourceTree = "<group>";
+		};
+		E6CAEACE3096397900C7B028 /* Review */ = {
+			isa = PBXGroup;
+			children = (
+				E6CAEAAA3096165700C7B028 /* ReviewShortModel.swift */,
+				E6CAEAB6309617B500C7B028 /* ReviewModel.swift */,
+				E6CAEABA3096188F00C7B028 /* ReviewModifyModel.swift */,
+			);
+			path = Review;
+			sourceTree = "<group>";
+		};
+		E6CAEACF3096397F00C7B028 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				E6CAEABC309619D400C7B028 /* ProfileModel.swift */,
+				E6CAEAB43096179000C7B028 /* UserShortModel.swift */,
+				E6CAEAA23096137500C7B028 /* Gender.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		E6CAEAD03096398500C7B028 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				E6CAEAA63096157F00C7B028 /* LoginCredentials.swift */,
+				E6CAEAA4309614AB00C7B028 /* UserRegisterModel.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		E6CAEAD13096398B00C7B028 /* Pagination */ = {
+			isa = PBXGroup;
+			children = (
+				E6CAEAB03096171E00C7B028 /* PageInfoModel.swift */,
+			);
+			path = Pagination;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
