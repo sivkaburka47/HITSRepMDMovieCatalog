@@ -33,3 +33,5 @@ extension Endpoint {
         return nil
     }
 }
+
+protocol AuthEndpointProtocol {}

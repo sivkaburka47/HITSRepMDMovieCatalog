@@ -11,6 +11,7 @@ enum NetworkServiceError: Error {
     case invalidURL
     case requestFailed(statusCode: HTTPStatusCode, data: Data?)
     case decodingFailed(Error)
+    case unauthorized
     case noInternet
     case unknown(Error)
 }

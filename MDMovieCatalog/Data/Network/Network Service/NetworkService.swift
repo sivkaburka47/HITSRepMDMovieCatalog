@@ -8,16 +8,18 @@
 import Foundation
 
 final class NetworkService {
+    weak var tokenRefresher: TokenRefresher?
+    
     private let session: NetworkSessionProtocol
     private let host: APIHost
-    private let token: String
     
     private let decoder = JSONDecoder()
-    private let encoder = JSONEncoder()
     
-    init(host: APIHost, token: String, session: NetworkSessionProtocol) {
+    init(
+        host: APIHost,
+        session: NetworkSessionProtocol
+    ) {
         self.host = host
-        self.token = token
         self.session = session
     }
     
@@ -76,8 +78,32 @@ extension NetworkService {
             return
         }
         
-        session.data(for: request) { result in
-            completion(result)
+        session.data(for: request) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let (data, response)):
+                completion(.success((data, response)))
+                
+            case .failure(let error):
+                if case .requestFailed(let status, let data) = error, status == .unauthorized {
+                    if endpoint is AuthEndpointProtocol {
+                        completion(.failure(.unauthorized))
+                        return
+                    }
+                    
+                    self.tokenRefresher?.refreshToken { [weak self] success in
+                        guard let self = self else { return }
+                        if success {
+                            self.performRequest(endpoint: endpoint, completion: completion)
+                        } else {
+                            completion(.failure(.unauthorized))
+                        }
+                    }
+                } else {
+                    completion(.failure(error))
+                }
+            }
         }
     }
     
@@ -95,7 +121,8 @@ extension NetworkService {
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
         
-        var headers = host.baseHeaders(token: token)
+        let currentToken = tokenRefresher?.currentToken ?? ""
+        var headers = host.baseHeaders(token: currentToken)
 
         if let endpointHeaders = endpoint.headers {
             headers.merge(endpointHeaders) { _, new in new }
@@ -115,4 +142,3 @@ extension NetworkService {
         }
     }
 }
-
