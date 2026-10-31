@@ -9,13 +9,13 @@ import Foundation
 
 final class NetworkClient {
     private let session: NetworkSessionProtocol
-    private let host: String
+    private let host: APIHost
     private let token: String
     
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
     
-    init(host: String, token: String, session: NetworkSessionProtocol) {
+    init(host: APIHost, token: String, session: NetworkSessionProtocol) {
         self.host = host
         self.token = token
         self.session = session
@@ -84,8 +84,8 @@ extension NetworkClient {
     private func makeRequest(endpoint: Endpoint) throws -> URLRequest {
         var components = URLComponents()
         components.scheme = "https"
-        components.host = host
-        components.path = endpoint.path
+        components.host = host.host
+        components.path = endpoint.path.hasPrefix("/") ? endpoint.path : "/" + endpoint.path
         components.queryItems = endpoint.queryItems
         
         guard let url = components.url else {
@@ -94,11 +94,14 @@ extension NetworkClient {
         
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
-        var headers = endpoint.headers ?? [:]
-        headers["Authorization"] = "Bearer \(token)"
-        headers["Content-Type"] = "application/json"
-        request.allHTTPHeaderFields = headers
         
+        var headers = host.baseHeaders(token: token)
+
+        if let endpointHeaders = endpoint.headers {
+            headers.merge(endpointHeaders) { _, new in new }
+        }
+        
+        request.allHTTPHeaderFields = headers
         request.httpBody = endpoint.body
         
         return request

@@ -16,7 +16,7 @@ enum APIHost {
         case .kreosoft:
             return "react-midterm.kreosoft.space"
         case .kinopoisk:
-            return ""
+            return "kinopoiskapiunofficial.tech"
         }
     }
     
