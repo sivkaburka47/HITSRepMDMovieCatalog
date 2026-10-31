@@ -12,17 +12,21 @@ final class URLSessionWrapper: NetworkSessionProtocol {
     
     func data(
         for request: URLRequest,
-        completion: @escaping (Result<(Data, HTTPURLResponse), NetworkError>) -> Void
+        completion: @escaping (Result<(Data, HTTPURLResponse), NetworkServiceError>) -> Void
     ) {
         session.dataTask(with: request) { data, response, error in
             if let error = error {
-                completion(.failure(NetworkError.unknown(error)))
+                if NetworkErrorUtility.isNoInternetError(error) {
+                    completion(.failure(.noInternet))
+                } else {
+                    completion(.failure(.unknown(error)))
+                }
                 return
             }
             
             guard let data = data, let response = response else {
                 let error = NSError(
-                    domain: "NetworkError",
+                    domain: "NetworkServiceError",
                     code: -1,
                     userInfo: [NSLocalizedDescriptionKey: "Нет данных или ответа"]
                 
@@ -33,7 +37,7 @@ final class URLSessionWrapper: NetworkSessionProtocol {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 let castError = NSError(
-                    domain: "NetworkError", code: -2,
+                    domain: "NetworkServiceError", code: -2,
                     userInfo: [NSLocalizedDescriptionKey: "Неверный формат ответа"]
                 )
                 completion(.failure(.unknown(castError)))

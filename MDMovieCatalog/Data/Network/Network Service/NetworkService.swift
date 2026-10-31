@@ -1,5 +1,5 @@
 //
-//  NetworkClient.swift
+//  NetworkService.swift
 //  MDMovieCatalog
 //
 //  Created by Stanislav Deinekin on 31.10.2026.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class NetworkClient {
+final class NetworkService {
     private let session: NetworkSessionProtocol
     private let host: APIHost
     private let token: String
@@ -23,7 +23,7 @@ final class NetworkClient {
     
     func request<T: Decodable>(
         endpoint: Endpoint,
-        completion: @escaping (Result<T, NetworkError>) -> Void
+        completion: @escaping (Result<T, NetworkServiceError>) -> Void
     ) {
         performRequest(endpoint: endpoint) { [weak self] result in
             guard let self = self else { return }
@@ -33,7 +33,7 @@ final class NetworkClient {
                 do {
                     let decodedResult = try self.decode(data, to: T.self)
                     completion(.success(decodedResult))
-                } catch let error as NetworkError {
+                } catch let error as NetworkServiceError {
                     completion(.failure(error))
                 } catch {
                     completion(.failure(.unknown(error)))
@@ -46,7 +46,7 @@ final class NetworkClient {
     
     func requestWithoutResponse(
         endpoint: Endpoint,
-        completion: @escaping (Result<Void, NetworkError>) -> Void
+        completion: @escaping (Result<Void, NetworkServiceError>) -> Void
     ) {
         performRequest(endpoint: endpoint) { result in
             switch result {
@@ -60,15 +60,15 @@ final class NetworkClient {
     
 }
 
-extension NetworkClient {
+extension NetworkService {
     private func performRequest(
         endpoint: Endpoint,
-        completion: @escaping (Result<(Data, HTTPURLResponse), NetworkError>) -> Void
+        completion: @escaping (Result<(Data, HTTPURLResponse), NetworkServiceError>) -> Void
     ) {
         let request: URLRequest
         do {
             request = try makeRequest(endpoint: endpoint)
-        } catch let error as NetworkError {
+        } catch let error as NetworkServiceError {
             completion(.failure(error))
             return
         } catch {
@@ -89,7 +89,7 @@ extension NetworkClient {
         components.queryItems = endpoint.queryItems
         
         guard let url = components.url else {
-            throw NetworkError.invalidURL
+            throw NetworkServiceError.invalidURL
         }
         
         var request = URLRequest(url: url)
@@ -111,7 +111,7 @@ extension NetworkClient {
         do {
             return try decoder.decode(type, from: data)
         } catch {
-            throw NetworkError.decodingFailed(error)
+            throw NetworkServiceError.decodingFailed(error)
         }
     }
 }

@@ -55,9 +55,9 @@
 		E6B37F662CDC15B3004345D0 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B37F652CDC15AE004345D0 /* Friend.swift */; };
 		E6CAEA9130960A7600C7B028 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEA9030960A7600C7B028 /* Endpoint.swift */; };
 		E6CAEA9330960AAE00C7B028 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEA9230960AAE00C7B028 /* HTTPMethod.swift */; };
-		E6CAEA9530960AD000C7B028 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEA9430960AD000C7B028 /* NetworkClient.swift */; };
+		E6CAEA9530960AD000C7B028 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEA9430960AD000C7B028 /* NetworkService.swift */; };
 		E6CAEA9730960AEA00C7B028 /* NetworkSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEA9630960AEA00C7B028 /* NetworkSessionProtocol.swift */; };
-		E6CAEA9C30960B2C00C7B028 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEA9B30960B2C00C7B028 /* NetworkError.swift */; };
+		E6CAEA9C30960B2C00C7B028 /* NetworkServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEA9B30960B2C00C7B028 /* NetworkServiceError.swift */; };
 		E6CAEA9E30960B4100C7B028 /* HTTPStatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEA9D30960B4100C7B028 /* HTTPStatusCode.swift */; };
 		E6CAEAA030960BCC00C7B028 /* APIHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEA9F30960BCC00C7B028 /* APIHost.swift */; };
 		E6CAEAA33096137500C7B028 /* Gender.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEAA23096137500C7B028 /* Gender.swift */; };
@@ -81,6 +81,7 @@
 		E6CAEACA309628B200C7B028 /* FilmType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEAC9309628B200C7B028 /* FilmType.swift */; };
 		E6CAEACC309628D000C7B028 /* FilmSearchByFiltersResponseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEACB309628D000C7B028 /* FilmSearchByFiltersResponseItem.swift */; };
 		E6CAEB1530963B0400C7B028 /* URLSessionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEB1430963B0400C7B028 /* URLSessionWrapper.swift */; };
+		E6CAEB183096413E00C7B028 /* NetworkServiceErrorUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CAEB173096413E00C7B028 /* NetworkServiceErrorUtility.swift */; };
 		E6FB14242CCD835A00E79D62 /* SignOutButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14232CCD835100E79D62 /* SignOutButtonView.swift */; };
 		E6FB14282CCE432400E79D62 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB14272CCE431E00E79D62 /* ProfileViewModel.swift */; };
 		E6FB142D2CCFAB9E00E79D62 /* MoviesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB142C2CCFAB9900E79D62 /* MoviesViewModel.swift */; };
@@ -147,9 +148,9 @@
 		E6B37F652CDC15AE004345D0 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
 		E6CAEA9030960A7600C7B028 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		E6CAEA9230960AAE00C7B028 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
-		E6CAEA9430960AD000C7B028 /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
+		E6CAEA9430960AD000C7B028 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		E6CAEA9630960AEA00C7B028 /* NetworkSessionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSessionProtocol.swift; sourceTree = "<group>"; };
-		E6CAEA9B30960B2C00C7B028 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		E6CAEA9B30960B2C00C7B028 /* NetworkServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceError.swift; sourceTree = "<group>"; };
 		E6CAEA9D30960B4100C7B028 /* HTTPStatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStatusCode.swift; sourceTree = "<group>"; };
 		E6CAEA9F30960BCC00C7B028 /* APIHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHost.swift; sourceTree = "<group>"; };
 		E6CAEAA23096137500C7B028 /* Gender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gender.swift; sourceTree = "<group>"; };
@@ -173,6 +174,7 @@
 		E6CAEAC9309628B200C7B028 /* FilmType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmType.swift; sourceTree = "<group>"; };
 		E6CAEACB309628D000C7B028 /* FilmSearchByFiltersResponseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmSearchByFiltersResponseItem.swift; sourceTree = "<group>"; };
 		E6CAEB1430963B0400C7B028 /* URLSessionWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionWrapper.swift; sourceTree = "<group>"; };
+		E6CAEB173096413E00C7B028 /* NetworkServiceErrorUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceErrorUtility.swift; sourceTree = "<group>"; };
 		E6FB14232CCD835100E79D62 /* SignOutButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignOutButtonView.swift; sourceTree = "<group>"; };
 		E6FB14272CCE431E00E79D62 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		E6FB142C2CCFAB9900E79D62 /* MoviesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesViewModel.swift; sourceTree = "<group>"; };
@@ -253,7 +255,6 @@
 			children = (
 				E6CAEABE3096218100C7B028 /* Kinopoisk */,
 				E6CAEAA13096132C00C7B028 /* Kreosoft */,
-				E6CAEA9A30960B2400C7B028 /* Base */,
 				E6B37F652CDC15AE004345D0 /* Friend.swift */,
 			);
 			path = Models;
@@ -273,12 +274,10 @@
 		E643266A2CC9812E007F6D47 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				E6CAEB163096402C00C7B028 /* Network Service */,
 				E6CAEB1330963AC000C7B028 /* Session */,
 				E64326682CC9812E007F6D47 /* Endpoints */,
 				E64326692CC9812E007F6D47 /* APIService.swift */,
-				E6CAEA9030960A7600C7B028 /* Endpoint.swift */,
-				E6CAEA9230960AAE00C7B028 /* HTTPMethod.swift */,
-				E6CAEA9430960AD000C7B028 /* NetworkClient.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -544,16 +543,6 @@
 			path = FriendsScreen;
 			sourceTree = "<group>";
 		};
-		E6CAEA9A30960B2400C7B028 /* Base */ = {
-			isa = PBXGroup;
-			children = (
-				E6CAEA9B30960B2C00C7B028 /* NetworkError.swift */,
-				E6CAEA9D30960B4100C7B028 /* HTTPStatusCode.swift */,
-				E6CAEA9F30960BCC00C7B028 /* APIHost.swift */,
-			);
-			path = Base;
-			sourceTree = "<group>";
-		};
 		E6CAEAA13096132C00C7B028 /* Kreosoft */ = {
 			isa = PBXGroup;
 			children = (
@@ -651,6 +640,20 @@
 				E6CAEB1430963B0400C7B028 /* URLSessionWrapper.swift */,
 			);
 			path = Session;
+			sourceTree = "<group>";
+		};
+		E6CAEB163096402C00C7B028 /* Network Service */ = {
+			isa = PBXGroup;
+			children = (
+				E6CAEA9F30960BCC00C7B028 /* APIHost.swift */,
+				E6CAEA9230960AAE00C7B028 /* HTTPMethod.swift */,
+				E6CAEA9D30960B4100C7B028 /* HTTPStatusCode.swift */,
+				E6CAEA9030960A7600C7B028 /* Endpoint.swift */,
+				E6CAEA9B30960B2C00C7B028 /* NetworkServiceError.swift */,
+				E6CAEB173096413E00C7B028 /* NetworkServiceErrorUtility.swift */,
+				E6CAEA9430960AD000C7B028 /* NetworkService.swift */,
+			);
+			path = "Network Service";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -797,7 +800,7 @@
 				E69413842CCA322700C19F17 /* MovieRepository.swift in Sources */,
 				E6CAEAC23096245E00C7B028 /* PersonByNameNameResponse_items.swift in Sources */,
 				E6CAEA9E30960B4100C7B028 /* HTTPStatusCode.swift in Sources */,
-				E6CAEA9C30960B2C00C7B028 /* NetworkError.swift in Sources */,
+				E6CAEA9C30960B2C00C7B028 /* NetworkServiceError.swift in Sources */,
 				E6FB14242CCD835A00E79D62 /* SignOutButtonView.swift in Sources */,
 				E694138C2CCA333900C19F17 /* MovieRepositoryImpl.swift in Sources */,
 				E64326AE2CC9812E007F6D47 /* SignInRepository.swift in Sources */,
@@ -846,13 +849,14 @@
 				E64326BC2CC9812E007F6D47 /* FavouritesViewController.swift in Sources */,
 				E6FB14F72CD2B91E00E79D62 /* AddFavoriteUseCase.swift in Sources */,
 				E64326BD2CC9812E007F6D47 /* FeedScreenViewModel.swift in Sources */,
+				E6CAEB183096413E00C7B028 /* NetworkServiceErrorUtility.swift in Sources */,
 				E6CAEAA93096160400C7B028 /* GenreModel.swift in Sources */,
 				E64326BE2CC9812E007F6D47 /* FeedViewController.swift in Sources */,
 				E6FB14282CCE432400E79D62 /* ProfileViewModel.swift in Sources */,
 				E64326BF2CC9812E007F6D47 /* MoviesViewController.swift in Sources */,
 				E69413862CCA324000C19F17 /* FetchMoviesUseCase.swift in Sources */,
 				E64326C02CC9812E007F6D47 /* ProfileViewController.swift in Sources */,
-				E6CAEA9530960AD000C7B028 /* NetworkClient.swift in Sources */,
+				E6CAEA9530960AD000C7B028 /* NetworkService.swift in Sources */,
 				E64326C12CC9812E007F6D47 /* WelcomeScreenController.swift in Sources */,
 				E64326C22CC9812E007F6D47 /* WelcomeViewModel.swift in Sources */,
 				E6CAEAB7309617B500C7B028 /* ReviewModel.swift in Sources */,
